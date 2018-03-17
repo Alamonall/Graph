@@ -2,22 +2,17 @@
 <head>
     <link rel="stylesheet" href="index.css" type="text/css"/>
     <meta charset="UTF-8">
-    <script src="graphics.min.js" type="text/javascript"/>
-    <style>
-        html, body, #container {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+    <script src="graphics.min.js" type="text/javascript">
+    </script>
+
 </head>
 <body>
     <div class="container" id="container">
         <script>
-            var nums = [3,-4,5,-6,7,2,3,1];
+            var nums = [3,-4,5, 4.5, -2.2,-6,7,2,3,1];
             var tempX = 50;
             var tempY = 300;
+
             signatureStyleText = {
                 fontFamily: "Times New Roman",
                 fontSize: "10px",
@@ -26,6 +21,7 @@
             stage = acgraph.create('container');
             stage.text(350,50,"Заголовок");
 
+            //Отрисовка осей координат
             stage.path()
                 //Ось Y
                 .moveTo(50, 50)
@@ -34,6 +30,7 @@
                 .moveTo(50, 300)
                 .lineTo(550, 300);
 
+            //Отрисовка подписей
             stage.text(550,285,"X");
             stage.text(55,35,"Y");
 
@@ -48,14 +45,28 @@
                 stage.text(35, count - 25, -1 *(count/25 - 13), signatureStyleText);
                 count-=25;
             }
-
+            //функция отрисовки графика
             function hrDrawTheLine() {
                 nums.forEach(function (value, index, nums){
 
                     var tempInd = (index*25)+50;
                     var tempVal = (((value*-1)*25)+300);
 
-                   stage.path()
+                    stage.path()
+                        .moveTo(tempX, tempY)
+                        .curveTo(tempInd, tempY, tempX , tempVal,  tempInd, tempVal);
+
+                    stage.text(tempInd + 5, tempVal - 5,
+                        "x:" + index +";y:" +value, signatureStyleText);
+
+                    stage.circle(tempInd,tempVal,3)
+                        .stroke("red")
+                        .fill("red");
+                    stage.circle(tempInd,tempVal,3)
+                        .stroke("red")
+                        .fill("red");
+
+                   /*stage.path()
                         .moveTo(tempX, tempY)
                         .lineTo(tempInd, tempVal);
 
@@ -66,7 +77,7 @@
                         .stroke("red")
                         .fill("red");
 
-
+                    */
                     tempX = tempInd;
                     tempY = tempVal;
                 });
