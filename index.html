@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="index.css" type="text/css"/>
+    <meta charset="UTF-8">
+    <script src="graphics.min.js" type="text/javascript"/>
+    <style>
+        html, body, #container {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        <script>
+            var nums = [3,-4,5,-6,7,2,3,1];
+            var tempX = 50;
+            var tempY = 300;
+            signatureStyleText = {
+                fontFamily: "Times New Roman",
+                fontSize: "10px",
+                color: "green"};
+
+            stage = acgraph.create('container');
+            stage.text(350,50,"Заголовок");
+
+            stage.path()
+                //Ось Y
+                .moveTo(50, 50)
+                .lineTo(50, 550)
+                //Ось Х
+                .moveTo(50, 300)
+                .lineTo(550, 300);
+
+            stage.text(550,285,"X");
+            stage.text(55,35,"Y");
+
+            var count = 550;
+            while(count > 50){
+                stage.path()
+                    .moveTo(count - 25, 295)
+                    .lineTo(count - 25, 305)
+                    .moveTo(55, count - 25)
+                    .lineTo(45, count - 25);
+                stage.text(count-25, 310, count/25 - 3, signatureStyleText);
+                stage.text(35, count - 25, -1 *(count/25 - 13), signatureStyleText);
+                count-=25;
+            }
+
+            function hrDrawTheLine() {
+                nums.forEach(function (value, index, nums){
+
+                    var tempInd = (index*25)+50;
+                    var tempVal = (((value*-1)*25)+300);
+
+                   stage.path()
+                        .moveTo(tempX, tempY)
+                        .lineTo(tempInd, tempVal);
+
+                    stage.text(tempInd + 5, tempVal - 5,
+                        "x:" + index +";y:" +value, signatureStyleText);
+
+                    stage.circle(tempInd,tempVal,3)
+                        .stroke("red")
+                        .fill("red");
+
+
+                    tempX = tempInd;
+                    tempY = tempVal;
+                });
+            }
+            hrDrawTheLine();
+        </script>
+    </div>
+</body>
+</html>
