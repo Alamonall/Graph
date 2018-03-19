@@ -9,32 +9,85 @@
 <body>
     <div class="container" id="container">
         <script>
-            var nums = [3,-4,5, 4.5, -2.2,-6,7,2,3,1];
-            var tempX = 50;
-            var tempY = 300;
 
+            var nums = []; // массив с числами
+            maxPoint = 0; //максимальное число в массиве
+            minPoint = 0; //минимальное число в массиве
+            viewFactorX = 25; // отступ от краев окна
+            viewFactorY = 25;
+
+            tempX = 25; //начало координат ??
+            tempY = 300; //начало координат (0,0)??
+
+
+            while (nums.length<20) {
+                var t = -100 + 2 * Math.random() * 100;
+                nums.push(t);
+                if(maxPoint<t){
+                    maxPoint=t;
+                }
+                if(minPoint>t){
+                    minPoint=t;
+                }
+            }
+            console.log("min = " + minPoint + "; max = " + maxPoint);
             signatureStyleText = {
                 fontFamily: "Times New Roman",
                 fontSize: "10px",
                 color: "green"};
 
             stage = acgraph.create('container');
-            stage.text(350,50,"Заголовок");
+
+            // вычисление цены и количества делений
+            z = maxPoint - minPoint; //
+            console.log("z = " + z);
+            d = 1; //цена деления
+            while (z > 10) {
+                z /= 5;
+                d *= 5;
+            }
+
+            z = z.toFixed(0); // округляем до целого числа (дробного количесвта делений не может быть)
+            d += viewFactorY; // Прибавляем коофициент для наглядности
+            e = 20;
+
+            tempDD = (d*z - maxPoint) - viewFactorY;
 
             //Отрисовка осей координат
+            lineAxisX = 0;
+            if(maxPoint < 0)
+                lineAxisX = maxPoint;
+            else if(minPoint>0)
+                lineAxisX = minPoint;
+            else{
+                lineAxisX = tempDD;
+            }
+
+            if((d*z % 100) !== 0){
+               // console.log("fix(dx) = " + ((d*z*0.005)));
+            }
+            console.log("fix(dx) = " + ((300*0.005).toFixed(0)));
+            console.log("dx = " + (d*z) + "; z = " + z);
+            console.log("X = " + tempDD);
             stage.path()
                 //Ось Y
-                .moveTo(50, 50)
-                .lineTo(50, 550)
-                //Ось Х
-                .moveTo(50, 300)
-                .lineTo(550, 300);
+                .moveTo(25, 25)
+                .lineTo(viewFactorX, d*z+viewFactorY)
+                //Ось Х ???????
+                .moveTo(25, lineAxisX)
+                .lineTo(25*20, lineAxisX);
 
-            //Отрисовка подписей
-            stage.text(550,285,"X");
-            stage.text(55,35,"Y");
+            while(z >= 0){
+                stage.path()
+                    .moveTo(20, d*z+viewFactorY)
+                    .lineTo(30, d*z+viewFactorY);
+                    // дописать отрисовку делений оси Х
+                stage.text(2, d*z+viewFactorY - 5 , (viewFactorX*z-100)*-1 /* не динамично, сойдет для данного массива*/
+                     , signatureStyleText);
+                z--;
+            }
 
-            var count = 550;
+            /*var count = 550;
             while(count > 50){
                 stage.path()
                     .moveTo(count - 25, 295)
@@ -44,41 +97,29 @@
                 stage.text(count-25, 310, count/25 - 3, signatureStyleText);
                 stage.text(35, count - 25, -1 *(count/25 - 13), signatureStyleText);
                 count-=25;
-            }
+            }*/
             //функция отрисовки графика
             function hrDrawTheLine() {
-                nums.forEach(function (value, index, nums){
-
-                    var tempInd = (index*25)+50;
-                    var tempVal = (((value*-1)*25)+300);
+                nums.forEach(function (value, index, nums) {
+                    var tempInd = (index * 4) + viewFactorX; //
+                    var tempVal = (((value * -1) * viewFactorY) + 300);
 
                     stage.path()
                         .moveTo(tempX, tempY)
-                        .curveTo(tempInd, tempY, tempX , tempVal,  tempInd, tempVal);
+                        .curveTo(tempInd, tempY, tempX, tempVal, tempInd, tempVal);
 
                     stage.text(tempInd + 5, tempVal - 5,
-                        "x:" + index +";y:" +value, signatureStyleText);
+                        "x:" + index + ";y:" + value, signatureStyleText);
 
-                    stage.circle(tempInd,tempVal,3)
+                    stage.circle(tempInd, tempVal, 3)
                         .stroke("red")
                         .fill("red");
-
-                   /*stage.path()
-                        .moveTo(tempX, tempY)
-                        .lineTo(tempInd, tempVal);
-
-                    stage.text(tempInd + 5, tempVal - 5,
-                        "x:" + index +";y:" +value, signatureStyleText);
-
-                    stage.circle(tempInd,tempVal,3)
-                        .stroke("red")
-                        .fill("red");*/
 
                     tempX = tempInd;
                     tempY = tempVal;
                 });
             }
-            hrDrawTheLine();
+            //hrDrawTheLine();
         </script>
     </div>
 </body>
