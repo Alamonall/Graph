@@ -31,6 +31,7 @@
                     minPoint=t;
                 }
             }
+
             console.log("min = " + minPoint + "; max = " + maxPoint);
             signatureStyleText = {
                 fontFamily: "Times New Roman",
@@ -49,16 +50,20 @@
             }
 
 
-            z = z.toFixed(0); // округляем до целого числа (дробного количесвта делений не может быть)
+            z = Math.ceil(z); // округляем до целого числа (дробного количесвта делений не может быть)
+            while((viewFactorX*z-100)*-1 > minPoint)
+                z++;
             d += viewFactorY; // Прибавляем коофициент для наглядности
             console.log("d = " + d + "; z = " + z);
 
             stage.path()
             //Ось Y
                 .moveTo(25, 25)
-                .lineTo(viewFactorX, d*z+viewFactorY)
+                .lineTo(viewFactorX, d*z+viewFactorY);
+            console.log("(viewFactorX*z-100)*-1 = " + (viewFactorX*z-100)*-1);
 
             while(z >= 0){
+                console.log("im in");
                 stage.path()
                     .moveTo(20, d*z+viewFactorY)
                     .lineTo(30, d*z+viewFactorY);
